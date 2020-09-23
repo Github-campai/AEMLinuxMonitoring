@@ -29,6 +29,7 @@ bash ~/monitoring.sh load5min #(show the average load in the last 5 minutes)
 bash ~/monitoring.sh mysqlslave #(work in progress, but show the amount of connected slaves to the master)
 bash ~/monitoring.sh SERVICE:* #(show of the specified service is running, or not. If not, return exit code 1. Example: bash ~/monitoring.sh SERVICE:apache2)
 bash ~/monitoring.sh GLUSTER:* #(show the requested data of a GlusterFS volume. Example: bash ~/monitoring.sh GLUSTER:split:gvol0 #Check if there are any split-brain files existing on volume gvol0 at this host)
+bash ~/monitoring.sh REDIS:ROLE #(show the status of every redis-server running on the machine. Slave of Master)
 ```
 
 ## Example:
