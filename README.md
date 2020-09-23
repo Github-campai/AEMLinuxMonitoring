@@ -5,7 +5,7 @@ This script determines if the distrobution you're using is Debian or Red Hat Ent
 
 ## Installation
 
-Create a custom device monitor and paste the contents of monitor.sh in the "Script"field with the script language selected on "Unix(Linux, Mac OSX)"
+Create a custom device monitor and paste the contents of monitor.sh in the "Script" field with the script language selected on "Unix(Linux, Mac OSX)"
 
 ## Testing and debugging
 
@@ -30,6 +30,7 @@ bash ~/monitoring.sh mysqlslave #(work in progress, but show the amount of conne
 bash ~/monitoring.sh SERVICE:* #(show of the specified service is running, or not. If not, return exit code 1. Example: bash ~/monitoring.sh SERVICE:apache2)
 bash ~/monitoring.sh GLUSTER:* #(show the requested data of a GlusterFS volume. Example: bash ~/monitoring.sh GLUSTER:split:gvol0 #Check if there are any split-brain files existing on volume gvol0 at this host)
 bash ~/monitoring.sh REDIS:ROLE #(show the status of every redis-server running on the machine. Slave of Master)
+bash ~/monitoring.sh REDIS:SERVERS #(count how many servers there are running on the server. return error code 1 or 0 depending on the setting defined)
 ```
 
 ## Example:

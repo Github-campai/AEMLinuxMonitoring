@@ -361,9 +361,8 @@ fi
     elif [[ $CHECK =~ REDIS ]]; then #Checken of de argument "GLUSTER" bevat
         REDIS=$(echo $CHECK | awk -F: '{print $2}') #Checken wat het argument is (nodes,split,throughput)
      if [ "$KERNEL" = "debian" ]; then
-        if [ "$REDIS" == "ROLE" ]; then #Als het argument "split" is, ga hier verder
+        if [ "$REDIS" == "ROLE" ]; then #Als het argument "ROLE" is, ga hier verder
             if [ "$REDIS" == "ROLE" ]; then
-
                 if [ -z "$ROLE" ];
                 then
                     echo "<-Start Result->" #Begin AEM resultaat
@@ -378,6 +377,7 @@ fi
                     printf "\n"
                     done
                     echo "<-End Result->" #Eindig AEM resultaat
+                    exit 0 #Geef aan AEM door dat er geen fouten zijn
                 else
                     echo "<-Start Result->" #Begin AEM resultaat
                     echo "I= Kan nodes/masters niet ophalen"
@@ -387,21 +387,27 @@ fi
                 fi
             fi
         fi
-        if [ "$GLUSTER" == "throughput" ]; then #Als het argument "throughput" is, ga hier verder
-            if [ "$GLUSTER" == "throughput" ]; then
-                THROUGHPUT="$(gluster volume top $VOLUME read-perf bs 2014 count 1024 | grep -A1 $HOSTNAME | grep Throughput | cut -d ' ' -f 2)"
-                if [ -z "$THROUGHPUT" ];
+        if [ "$REDIS" == "SERVERS" ]; then #Als het argument "throughput" is, ga hier verder
+            if [ "$REDIS" == "SERVERS" ]; then
+                SERVERS="$(ps fax | grep redis-server | grep bin | wc -l)"
+                if [ -z "$SERVERS" ];
                 then
                     echo "<-Start Result->" #Begin AEM resultaat
                     echo "I= Kan throughput niet ophalen"
                     echo "<-End Result->" #Eindig AEM resultaat
                     echo "$TIMESTAMP Resultaat: Kan throughput niet ophalen (exit code 1)" >> $LOGDIR$LOGFILE # Schrijf uitkomst ook naar logfile
                     exit 1 #Geef aan AEM door dat er een error is op zijn request
-                else
+                elif [ "$SERVERS" -le "1" ]; then
                     echo "<-Start Result->" #Begin AEM resultaat
-                    echo "I= $THROUGHPUT Mb/s throughput op $HOSTNAME"
+                    echo "I= $SERVERS Redis-Server actief"
                     echo "<-End Result->" #Eindig AEM resultaat
-                    echo "$TIMESTAMP Resultaat: $THROUGHPUT Mb/s throughput op $HOSTNAME" >> $LOGDIR$LOGFILE # Schrijf uitkomst ook naar logfile
+                    echo "$TIMESTAMP Resultaat: $SERVERS Redis-Servers actief op $HOSTNAME (exit code 1)" >> $LOGDIR$LOGFILE # Schrijf uitkomst ook naar logfile
+                    exit 1 #Geef aan AEM door dat er geen fouten zijn
+                elif [ "$SERVERS" -ge "2" ]; then
+                    echo "<-Start Result->" #Begin AEM resultaat
+                    echo "I= $SERVERS Redis-Servers actief"
+                    echo "<-End Result->" #Eindig AEM resultaat
+                    echo "$TIMESTAMP Resultaat: $SERVERS Redis-Servers actief op $HOSTNAME" >> $LOGDIR$LOGFILE # Schrijf uitkomst ook naar logfile
                     exit 0 #Geef aan AEM door dat er geen fouten zijn
                 fi
             fi
